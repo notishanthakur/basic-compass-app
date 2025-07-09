@@ -1,7 +1,7 @@
 const directionDisplay = document.getElementById("Direction");
 
 function handleIOS(event){
-    const heading = event.webkitCompassHeading;
+    const heading = (360-event.webkitCompassHeading)%360;
     const isAvailable = 'ondeviceorientation' in window;
     directionDisplay.innerHTML = `${heading ? heading.toFixed(0) + '°' : 'N/A'} (iOS) — Supported: ${isAvailable}`;
 }
@@ -15,13 +15,14 @@ function handleAndroid(event){
 const ua = navigator.userAgent;
 
 document.getElementById("request").onclick = () => {
-    DeviceOrientationEvent.requestPermission?.();
+    DeviceOrientationEvent.requestPermission?.().then(res => {
+        if (res === 'granted') window.addEventListener('deviceorientation', handleIOS);
+    });
 }
     
 
 if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
     alert("iOS device detected");
-    
 } 
     
 
