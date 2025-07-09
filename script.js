@@ -14,21 +14,14 @@ function handleAndroid(event){
 
 const ua = navigator.userAgent;
 
+document.getElementById("request").onclick = () => {
+    DeviceOrientationEvent.requestPermission?.().then(res => {
+        if (res === 'granted') window.addEventListener('deviceorientation', handleIOS);
+    });
+}    
 
 if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
-    if (confirm("Requesting Permissions")) {
-        DeviceOrientationEvent.requestPermission?.().then(res => {
-            if (res === 'granted') window.addEventListener('deviceorientation', handleIOS);
-            else alert("Permission Denied, User direction not available");})
-            .catch(err => {
-                    console.error("Error requesting permission:", err);
-                    alert("Error while requesting permission.");
-                });
-
-        } else {
-            alert("Permission Denied, User direction not available");
-        }
-    
+    alert("iOS device detected");
 } 
     
 
