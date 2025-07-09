@@ -15,12 +15,10 @@ function handleAndroid(event){
 const ua = navigator.userAgent;
 
 if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
-    console.log("iOS device detected");
-
-    if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
-        DeviceOrientationEvent.requestPermission()
-            .then(permissionState => {
-                if(permissionState === 'granted') {
+    alert("iOS device detected");
+    DeviceOrientationEvent.requestPermission()
+            .then(response => {
+                if(response === 'granted') {
                     window.addEventListener("deviceorientation", handleIOS, true);
                 }
                 else{
@@ -28,12 +26,9 @@ if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
                 }
             })
             .catch(console.error);
-    } 
-    else{
-        window.addEventListener("deviceorientation", handleIOS, true);
-    }
-
 } 
+    
+
 else if(/Android/i.test(ua)){
     console.log("Android device detected");
 
