@@ -17,16 +17,9 @@ const ua = navigator.userAgent;
 if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
     
     alert("iOS device detected");
-    DeviceOrientationEvent.requestPermission()
-            .then(response => {
-                if(response === 'granted') {
-                    window.addEventListener("deviceorientation", handleIOS, true);
-                }   
-                else{
-                    directionDisplay.innerHTML = "Permission denied";
-                }
-            })
-            .catch(console.error);
+    DeviceOrientationEvent.requestPermission?.().then(res => {
+        if (res === 'granted') window.addEventListener('deviceorientation', handler);
+    });
 } 
     
 
