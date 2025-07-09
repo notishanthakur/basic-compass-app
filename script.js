@@ -1,7 +1,7 @@
 const directionDisplay = document.getElementById("Direction");
 
 function handleIOS(event){
-    const heading = (360-event.webkitCompassHeading)%360;
+    const heading = event.webkitCompassHeading;
     const isAvailable = 'ondeviceorientation' in window;
     directionDisplay.innerHTML = `${heading ? heading.toFixed(0) + '°' : 'N/A'} (iOS) — Supported: ${isAvailable}`;
 }
