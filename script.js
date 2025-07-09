@@ -14,12 +14,17 @@ function handleAndroid(event){
 
 const ua = navigator.userAgent;
 
-if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
-    
-    alert("iOS device detected");
+document.getElementById("request").onclick = () => {
     DeviceOrientationEvent.requestPermission?.().then(res => {
         if (res === 'granted') window.addEventListener('deviceorientation', handler);
     });
+}
+    
+
+if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
+    
+    alert("iOS device detected");
+    
 } 
     
 
