@@ -1,19 +1,46 @@
+const directionDisplay = document.getElementById("Direction");
 
-if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-    console.log("This is an iOS device.");
-    window.addEventListener("deviceorientation", main, true);
-    function main(event){
-        document.getElementById("Direction").innerHTML=`${event.webkitCompassHeading} :  ${'deviceorientation' in window}`;
-    }
+function handleIOS(event){
+    const heading = event.webkitCompassHeading;
+    const isAvailable = 'ondeviceorientation' in window;
+    directionDisplay.innerHTML = `${heading ? heading.toFixed(0) + '°' : 'N/A'} (iOS) — Supported: ${isAvailable}`;
 }
-else if(navigator.userAgent.includes('Android')) {
-    console.log("This is an Android device!");
-    window.addEventListener("deviceorientationabsolute", main, true);
-    function main(event){
-        document.getElementById("Direction").innerHTML=`${event.alpha} :  ${'ondeviceorientationabsolute' in window}`;
+
+function handleAndroid(event){
+    const heading = event.alpha;
+    const isAvailable = 'ondeviceorientationabsolute' in window;
+    directionDisplay.innerHTML = `${heading ? heading.toFixed(0) + '°' : 'N/A'} (Android) — Supported: ${isAvailable}`;
+}
+
+const ua = navigator.userAgent;
+
+if(/iPad|iPhone|iPod|Macintosh/.test(ua)){
+    console.log("iOS device detected");
+
+    if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+        DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+                if(permissionState === 'granted') {
+                    window.addEventListener("deviceorientation", handleIOS, true);
+                }
+                else{
+                    directionDisplay.innerHTML = "Permission denied";
+                }
+            })
+            .catch(console.error);
+    } 
+    else{
+        window.addEventListener("deviceorientation", handleIOS, true);
     }
-    }
+
+} 
+else if(/Android/i.test(ua)){
+    console.log("Android device detected");
+
+    window.addEventListener("deviceorientationabsolute", handleAndroid, true);
+
+} 
 else{
-    console.log("This is a Windows device!")
-    document.getElementById("Direction").innerHTML=`No compass on windows`;
+    console.log("Non-mobile device detected");
+    directionDisplay.innerHTML = `Compass not available`;
 }
